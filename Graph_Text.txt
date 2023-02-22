@@ -1,0 +1,214 @@
+// Adjecancy Matrix
+
+#include<bits/stdc++.h>
+using namespace std;
+int main(){
+    int n,m;
+    cin>>n>>m;
+    vector<vector<int>>v(n+1,vector<int>(n+1,0));
+    for(int i=1;i<=m;i++)
+    {
+        int x,y;
+        cin>>x>>y;
+        v[x][y]=1;
+        v[y][x]=1;
+    }
+    for(int i=1;i<=n;i++)
+    {
+        for(int j=1;j<=n;j++)
+        {
+            cout<<v[i][j]<<" ";
+        }
+        cout<<endl;
+    }
+}
+
+
+//Depth first Traversal of a graph:
+
+#include&lt;iostream&gt; 
+#include &lt;list&gt; 
+using namespace std; 
+   
+// a directed graph class 
+class DiGraph 
+{ 
+    int V;    // No. of vertices 
+   
+    // Pointer to an array containing adjacency lists 
+    list&lt;int&gt; *adjList;    
+public: 
+    DiGraph(int V);  // Constructor 
+   
+    // add an edge from vertex v to w
+    void addEdge(int v, int w);  
+   
+    // BFS traversal sequence starting with s -&gt;starting node 
+    void BFS(int s);   
+}; 
+   
+DiGraph::DiGraph(int V) 
+{ 
+    this-&gt;V = V; 
+    adjList = new list&lt;int&gt;[V]; 
+}
+ void DiGraph::addEdge(int v, int w) 
+{ 
+    adjList[v].push_back(w); // Add w to v’s list. 
+} 
+   
+void DiGraph::BFS(int s) 
+{ 
+    // initially none of the vertices is visited
+    bool *visited = new bool[V]; 
+    for(int i = 0; i &lt; V; i++) 
+        visited[i] = false; 
+   
+    // queue to hold BFS traversal sequence 
+    list&lt;int&gt; queue; 
+   
+    // Mark the current node as visited and enqueue it 
+    visited[s] = true; 
+    queue.push_back(s); 
+   
+    // iterator 'i' to get all adjacent vertices 
+    list&lt;int&gt;::iterator i; 
+   
+    while(!queue.empty()) 
+    { 
+        // dequeue the vertex 
+        s = queue.front(); 
+        cout &lt;&lt; s &lt;&lt; " "; 
+        queue.pop_front(); 
+   
+        // get all adjacent vertices of popped vertex and process each if not already visited 
+        for (i = adjList[s].begin(); i != adjList[s].end(); ++i) 
+        { 
+            if (!visited[*i]) 
+            { 
+                visited[*i] = true; 
+                queue.push_back(*i); 
+            } 
+        } 
+    } 
+}
+// main program 
+int main() 
+{ 
+    // create a graph 
+    DiGraph dg(5); 
+    dg.addEdge(0, 1); 
+    dg.addEdge(0, 2); 
+    dg.addEdge(0, 3);
+    dg.addEdge(1, 2); 
+    dg.addEdge(2, 4);
+    dg.addEdge(3, 3); 
+    dg.addEdge(4, 4);
+   
+    cout &lt;&lt; "Breadth First Traversal for given graph (with 0 as starting node): "&lt;&lt;endl;
+    dg.BFS(0); 
+   
+    return 0; 
+}
+
+
+
+// Kruskal Algorithm
+
+// Kruskal's algorithm in C++
+
+#include <algorithm>
+#include <iostream>
+#include <vector>
+using namespace std;
+
+#define edge pair<int, int>
+
+class Graph {
+   private:
+  vector<pair<int, edge> > G;  // graph
+  vector<pair<int, edge> > T;  // mst
+  int *parent;
+  int V;  // number of vertices/nodes in graph
+   public:
+  Graph(int V);
+  void AddWeightedEdge(int u, int v, int w);
+  int find_set(int i);
+  void union_set(int u, int v);
+  void kruskal();
+  void print();
+};
+Graph::Graph(int V) {
+  parent = new int[V];
+
+  //i 0 1 2 3 4 5
+  //parent[i] 0 1 2 3 4 5
+  for (int i = 0; i < V; i++)
+    parent[i] = i;
+
+  G.clear();
+  T.clear();
+}
+void Graph::AddWeightedEdge(int u, int v, int w) {
+  G.push_back(make_pair(w, edge(u, v)));
+}
+int Graph::find_set(int i) {
+  // If i is the parent of itself
+  if (i == parent[i])
+    return i;
+  else
+    // Else if i is not the parent of itself
+    // Then i is not the representative of his set,
+    // so we recursively call Find on its parent
+    return find_set(parent[i]);
+}
+
+void Graph::union_set(int u, int v) {
+  parent[u] = parent[v];
+}
+void Graph::kruskal() {
+  int i, uRep, vRep;
+  sort(G.begin(), G.end());  // increasing weight
+  for (i = 0; i < G.size(); i++) {
+    uRep = find_set(G[i].second.first);
+    vRep = find_set(G[i].second.second);
+    if (uRep != vRep) {
+      T.push_back(G[i]);  // add to tree
+      union_set(uRep, vRep);
+    }
+  }
+}
+void Graph::print() {
+  cout << "Edge :"
+     << " Weight" << endl;
+  for (int i = 0; i < T.size(); i++) {
+    cout << T[i].second.first << " - " << T[i].second.second << " : "
+       << T[i].first;
+    cout << endl;
+  }
+}
+int main() {
+  Graph g(6);
+  g.AddWeightedEdge(0, 1, 4);
+  g.AddWeightedEdge(0, 2, 4);
+  g.AddWeightedEdge(1, 2, 2);
+  g.AddWeightedEdge(1, 0, 4);
+  g.AddWeightedEdge(2, 0, 4);
+  g.AddWeightedEdge(2, 1, 2);
+  g.AddWeightedEdge(2, 3, 3);
+  g.AddWeightedEdge(2, 5, 2);
+  g.AddWeightedEdge(2, 4, 4);
+  g.AddWeightedEdge(3, 2, 3);
+  g.AddWeightedEdge(3, 4, 3);
+  g.AddWeightedEdge(4, 2, 4);
+  g.AddWeightedEdge(4, 3, 3);
+  g.AddWeightedEdge(5, 2, 2);
+  g.AddWeightedEdge(5, 4, 3);
+  g.kruskal();
+  g.print();
+  return 0;
+}
+
+
+
+
