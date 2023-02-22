@@ -1,0 +1,273 @@
+// Binary Serach Tree
+
+class Node {
+    int key;
+    Node left;
+    Node right;
+
+    public Node(int key) {
+        this.key = key;
+    }
+}
+
+class `BST` {
+    private Node root;
+
+    public void insert(int key) {
+        root = insert(root, key);
+    }
+
+    private Node insert(Node node, int key) {
+        if (node == null) {
+            return new Node(key);
+        }
+        if (key <= node.key) {
+            node.left = insert(node.left, key);
+        } else {
+            node.right = insert(node.right, key);
+        }
+        return node;
+    }
+
+    public Node search(int key) {
+        return search(root, key);
+    }
+
+    private Node search(Node node, int key) {
+        if (node == null || node.key == key) {
+            return node;
+        }
+        if (key <= node.key) {
+            return search(node.left, key);
+        }
+        return search(node.right, key);
+    }
+
+    public void inOrder() {
+        System.out.print("The inOrder traversal is: ");
+        inOrder(root);
+        System.out.println();
+    }
+
+    private void inOrder(Node node) {
+        if (node == null) {
+            return;
+        }
+        inOrder(node.left);
+        System.out.print(node.key + " ");
+        inOrder(node.right);
+    }
+
+    public void preOrder() {
+        System.out.print("The preOrder traversal is: ");
+        preOrder(root);
+        System.out.println();
+    }
+
+    private void preOrder(Node node) {
+        if (node == null) {
+            return;
+        }
+        System.out.print(node.key + " ");
+        preOrder(node.left);
+        preOrder(node.right);
+    }
+
+    public void postOrder() {
+        System.out.print("The postOrder traversal is: ");
+        postOrder(root);
+        System.out.println();
+    }
+
+    private void postOrder(Node node) {
+        if (node == null) {
+            return;
+        }
+        postOrder(node.left);
+        postOrder(node.right);
+        System.out.print(node.key + " ");
+    }
+}
+
+public class BinarySearchTree {
+    public static void main(String[] args) {
+        `BST` `bst` = new `BST`();
+        `bst`.insert(10);
+        `bst`.insert(15);
+        `bst`.insert(5);
+        `bst`.insert(8);
+        `bst`.insert(18);
+        `bst`.insert(12);
+        `bst`.insert(10);
+
+        `bst`.preOrder();
+        `bst`.inOrder();
+        `bst`.postOrder();
+
+        search(`bst`, 12);
+        search(`bst`, 9);
+    }
+
+    private static void search(`BST` `bst`, int key) {
+        if (`bst`.search(key) != null) {
+            System.out.println(key + " found");
+        } else {
+            System.out.println(key + " not found");
+        }
+    }
+}
+
+
+// MAx heap
+
+// Max-Heap data structure in C++
+
+#include <iostream>
+#include <vector>
+using namespace std;
+
+void swap(int *a, int *b)
+{
+  int temp = *b;
+  *b = *a;
+  *a = temp;
+}
+void heapify(vector<int> &hT, int i)
+{
+  int size = hT.size();
+  int largest = i;
+  int l = 2 * i + 1;
+  int r = 2 * i + 2;
+  if (l < size && hT[l] > hT[largest])
+    largest = l;
+  if (r < size && hT[r] > hT[largest])
+    largest = r;
+
+  if (largest != i)
+  {
+    swap(&hT[i], &hT[largest]);
+    heapify(hT, largest);
+  }
+}
+void insert(vector<int> &hT, int newNum)
+{
+  int size = hT.size();
+  if (size == 0)
+  {
+    hT.push_back(newNum);
+  }
+  else
+  {
+    hT.push_back(newNum);
+    for (int i = size / 2 - 1; i >= 0; i--)
+    {
+      heapify(hT, i);
+    }
+  }
+}
+void deleteNode(vector<int> &hT, int num)
+{
+  int size = hT.size();
+  int i;
+  for (i = 0; i < size; i++)
+  {
+    if (num == hT[i])
+      break;
+  }
+  swap(&hT[i], &hT[size - 1]);
+
+  hT.pop_back();
+  for (int i = size / 2 - 1; i >= 0; i--)
+  {
+    heapify(hT, i);
+  }
+}
+void printArray(vector<int> &hT)
+{
+  for (int i = 0; i < hT.size(); ++i)
+    cout << hT[i] << " ";
+  cout << "\n";
+}
+
+int main()
+{
+  vector<int> heapTree;
+
+  insert(heapTree, 3);
+  insert(heapTree, 4);
+  insert(heapTree, 9);
+  insert(heapTree, 5);
+  insert(heapTree, 2);
+
+  cout << "Max-Heap array: ";
+  printArray(heapTree);
+
+  deleteNode(heapTree, 4);
+
+  cout << "After deleting an element: ";
+
+  printArray(heapTree);
+}
+
+// Min heap
+
+#include <iostream>
+#include <bits/stdc++.h>
+
+using namespace std;
+
+//Function to print the elements of the Min Heap
+void show(priority_queue<int, vector<int>, greater<int>> q)
+{
+    //Copying the Priority Queue into another to maintain the original Priority Queue
+    priority_queue<int, vector<int>, greater<int>> mh = q;
+
+    while (!mh.empty())
+    {
+        cout << "\t" << mh.top(); //printing the top most element
+        mh.pop();                 //deleting the top most element to move to the next
+    }
+
+    cout << endl;
+}
+
+int main()
+{
+   
+    cout << " =====  Program to demonstrate the Implementation of Min Heap using a Priority Queue, in CPP  ===== \n\n";
+
+    int i;
+
+    /* Declaring a Priority Queue of integers
+    Note: by default the priority queue is Max heap in c++ : priority_queue<int> q
+    To create a Min heap, follow the below declaration of the Priority Queue
+    */
+    priority_queue<int, vector<int>, greater<int>> minHeap;
+
+    //Filling the elements into the Priority Queue
+    cout << "=====  Inserting elements into the Priority Queue  ====\n\n";
+    for (i = 1; i < 6; i++)
+    {
+        minHeap.push(i * 20);
+    }
+
+    cout << "The number of elements in the Min Heap are : " << minHeap.size();
+    ;
+
+    cout << "\n\nThe first element or the element with the highest priority is: " << minHeap.top();
+    ;
+
+    cout << "\n\nThe elements of the Min Heap are: ";
+    show(minHeap);
+
+    cout << "\n\nAfter Deleting the first or the smallest element from the Min Heap, it becomes: ";
+    minHeap.pop();
+    show(minHeap);
+
+    cout << "\n\nThe number of elements in the Min Heap after deleting the smallest element are : " << minHeap.size();
+    ;
+
+    cout << "\n\n\n";
+
+    return 0;
+}
